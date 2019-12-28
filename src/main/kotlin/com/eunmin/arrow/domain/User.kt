@@ -1,20 +1,28 @@
 package com.eunmin.arrow.domain
 
+import arrow.core.Either
+import arrow.core.Left
+import arrow.core.Right
+
 data class Userid private constructor(val value: String) {
     companion object {
-        operator fun invoke(value: String): Userid {
-            if (value.length > 16) throw UseridLimitExceeded(value)
-            return Userid(value)
-        }
+        operator fun invoke(value: String): Either<UserException, Userid> =
+            if (value.length > 16) {
+                Left(UseridLimitExceeded(value))
+            } else {
+                Right(Userid(value))
+            }
     }
 }
 
 data class Username private constructor(val value: String) {
     companion object {
-        operator fun invoke(value: String): Username {
-            if (value.length > 80) throw UsernameLimitExceeded(value)
-            return Username(value)
-        }
+        operator fun invoke(value: String): Either<UserException, Username> =
+            if (value.length > 80) {
+                Left(UsernameLimitExceeded(value))
+            } else {
+                Right(Username(value))
+            }
     }
 }
 
