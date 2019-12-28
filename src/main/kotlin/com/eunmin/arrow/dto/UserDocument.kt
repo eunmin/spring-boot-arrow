@@ -1,7 +1,7 @@
 package com.eunmin.arrow.dto
 
-import com.eunmin.arrow.domain.String16
-import com.eunmin.arrow.domain.String80
+import com.eunmin.arrow.domain.Userid
+import com.eunmin.arrow.domain.Username
 import com.eunmin.arrow.domain.User
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -20,4 +20,4 @@ data class UserDocument(
         }
 }
 
-fun UserDocument.toDomain(): User = User(String16(this.id), String80(this.name))
+fun UserDocument.toDomain(): User = User(Userid(this.id), Username(this.name))

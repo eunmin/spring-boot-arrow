@@ -1,7 +1,7 @@
 package com.eunmin.arrow.repository.impl
 
-import com.eunmin.arrow.domain.DuplicatedUserException
-import com.eunmin.arrow.domain.UserNotFoundException
+import com.eunmin.arrow.domain.DuplicateUser
+import com.eunmin.arrow.domain.UserNotFound
 import com.eunmin.arrow.dto.UserDocument
 import com.eunmin.arrow.repository.UserRepository
 import org.springframework.dao.DuplicateKeyException
@@ -16,9 +16,9 @@ class UserRepositoryImpl(
             try {
                 mongoTemplate.insert(userDocument)
             } catch (e: DuplicateKeyException) {
-                throw DuplicatedUserException("userid ${userDocument.id} is already exists")
+                throw DuplicateUser(userDocument.id)
             }
 
     override fun get(id: String): UserDocument =
-            mongoTemplate.findById(id, UserDocument::class.java) ?: throw UserNotFoundException("userid ${id} is not found")
+            mongoTemplate.findById(id, UserDocument::class.java) ?: throw UserNotFound(id)
 }

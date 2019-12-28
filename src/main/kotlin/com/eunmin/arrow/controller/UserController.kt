@@ -1,6 +1,5 @@
 package com.eunmin.arrow.controller
 
-import com.eunmin.arrow.domain.DuplicatedUserException
 import com.eunmin.arrow.dto.CreateUserInput
 import com.eunmin.arrow.dto.UserPayload
 import com.eunmin.arrow.service.UserService

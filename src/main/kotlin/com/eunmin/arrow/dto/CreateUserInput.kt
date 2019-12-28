@@ -1,7 +1,7 @@
 package com.eunmin.arrow.dto
 
-import com.eunmin.arrow.domain.String16
-import com.eunmin.arrow.domain.String80
+import com.eunmin.arrow.domain.Userid
+import com.eunmin.arrow.domain.Username
 import com.eunmin.arrow.domain.User
 
 data class CreateUserInput(
@@ -9,4 +9,4 @@ data class CreateUserInput(
         val name: String
 )
 
-fun CreateUserInput.toDomain(): User = User(String16(this.id), String80(this.name))
+fun CreateUserInput.toDomain(): User = User(Userid(this.id), Username(this.name))
