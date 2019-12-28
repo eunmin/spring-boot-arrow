@@ -7,6 +7,6 @@ data class UserPayload(
         val name: String
 ) {
     companion object {
-        fun fromDomain(user: User) = UserPayload(user.id.value, user.name.value)
+        fun fromDomain(user: User): UserPayload = UserPayload(user.id.value, user.name.value)
     }
 }

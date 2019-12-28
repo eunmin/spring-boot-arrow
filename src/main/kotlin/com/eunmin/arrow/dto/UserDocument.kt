@@ -16,7 +16,7 @@ data class UserDocument(
         val name: String
 ) {
         companion object {
-                fun fromDomain(user: User) = UserDocument(user.id.value, user.name.value)
+                fun fromDomain(user: User): UserDocument = UserDocument(user.id.value, user.name.value)
         }
 }
 
