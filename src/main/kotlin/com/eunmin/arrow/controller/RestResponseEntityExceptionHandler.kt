@@ -23,6 +23,6 @@ class RestResponseEntityExceptionHandler: ResponseEntityExceptionHandler() {
             = handleExceptionInternal(e, ErrorPayload.fromDomain(e), HttpHeaders(), HttpStatus.NOT_FOUND, request)
 
     @ExceptionHandler(LimitExceededException::class)
-    fun handleUserNotFoundException(e: LimitExceededException, request: WebRequest)
+    fun handleLimitExceededException(e: ErrorCodeException, request: WebRequest)
             = handleExceptionInternal(e, ErrorPayload.fromDomain(e), HttpHeaders(), HttpStatus.BAD_REQUEST, request)
 }
