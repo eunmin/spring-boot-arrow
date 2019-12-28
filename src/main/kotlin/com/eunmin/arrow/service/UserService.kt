@@ -1,7 +1,7 @@
 package com.eunmin.arrow.service
 
 import arrow.core.Either
-import arrow.core.flatMap
+import arrow.core.extensions.fx
 import com.eunmin.arrow.domain.UserException
 import com.eunmin.arrow.dto.CreateUserInput
 import com.eunmin.arrow.dto.UserDocument
@@ -14,20 +14,17 @@ import org.springframework.stereotype.Service
 class UserService(
         private val userRepository: UserRepository
 ) {
-    fun get(id: String): Either<UserException, UserPayload> =
-        userRepository.get(id).flatMap { userDocument ->
-            userDocument.toDomain().map { user ->
-                UserPayload.fromDomain(user)
-            }
-        }
+    fun get(id: String): Either<UserException, UserPayload> = Either.fx {
+        val (userDocument) = userRepository.get(id)
+        val (user) = userDocument.toDomain()
+        UserPayload.fromDomain(user)
+    }
 
-    fun create(input: CreateUserInput): Either<UserException, UserPayload> =
-        input.toDomain().flatMap { user ->
-            val userDocument = UserDocument.fromDomain(user)
-            userRepository.create(userDocument).flatMap { createdUserDocument ->
-                createdUserDocument.toDomain().map { createdUser ->
-                    UserPayload.fromDomain(createdUser)
-                }
-            }
-        }
+    fun create(input: CreateUserInput): Either<UserException, UserPayload> = Either.fx {
+        val (user) = input.toDomain()
+        val userDocument = UserDocument.fromDomain(user)
+        val (createdUserDocument) = userRepository.create(userDocument)
+        val (createdUser) = createdUserDocument.toDomain()
+        UserPayload.fromDomain(createdUser)
+    }
 }

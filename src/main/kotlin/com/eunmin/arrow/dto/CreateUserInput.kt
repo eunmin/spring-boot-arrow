@@ -1,6 +1,7 @@
 package com.eunmin.arrow.dto
 
 import arrow.core.Either
+import arrow.core.extensions.fx
 import arrow.core.flatMap
 import com.eunmin.arrow.domain.Userid
 import com.eunmin.arrow.domain.Username
@@ -12,9 +13,8 @@ data class CreateUserInput(
         val name: String
 )
 
-fun CreateUserInput.toDomain(): Either<UserException, User> =
-    Userid(this.id).flatMap { id ->
-        Username(this.name).map { name ->
-            User(id, name)
-        }
-    }
+fun CreateUserInput.toDomain(): Either<UserException, User> = Either.fx {
+    val (id) = Userid(id)
+    val (name) = Username(name)
+    User(id, name)
+}

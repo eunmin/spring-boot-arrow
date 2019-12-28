@@ -1,6 +1,7 @@
 package com.eunmin.arrow.dto
 
 import arrow.core.Either
+import arrow.core.extensions.fx
 import arrow.core.flatMap
 import com.eunmin.arrow.domain.Userid
 import com.eunmin.arrow.domain.Username
@@ -23,9 +24,8 @@ data class UserDocument(
         }
 }
 
-fun UserDocument.toDomain(): Either<UserException, User> =
-        Userid(this.id).flatMap { id ->
-                Username(this.name).map { name ->
-                        User(id, name)
-                }
-        }
+fun UserDocument.toDomain(): Either<UserException, User> = Either.fx {
+    val (id) = Userid(id)
+    val (name) = Username(name)
+    User(id, name)
+}
