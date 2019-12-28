@@ -11,9 +11,17 @@ import org.springframework.stereotype.Service
 class UserService(
         private val userRepository: UserRepository
 ) {
-    fun get(id: String): UserPayload =
-            UserPayload.fromDomain(userRepository.get(id).toDomain())
+    fun get(id: String): UserPayload {
+        val userDocument = userRepository.get(id)
+        val user = userDocument.toDomain()
+        return UserPayload.fromDomain(user)
+    }
 
-    fun create(input: CreateUserInput): UserPayload =
-            UserPayload.fromDomain(userRepository.create(UserDocument.fromDomain(input.toDomain())).toDomain())
+    fun create(input: CreateUserInput): UserPayload {
+        val user = input.toDomain()
+        val userDocument = UserDocument.fromDomain(user)
+        val createdUserDocument = userRepository.create(userDocument)
+        val createdUser = createdUserDocument.toDomain()
+        return UserPayload.fromDomain(createdUser)
+    }
 }
