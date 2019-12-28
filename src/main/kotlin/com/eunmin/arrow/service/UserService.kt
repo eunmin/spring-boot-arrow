@@ -24,9 +24,9 @@ class UserService(
     fun create(input: CreateUserInput): Either<UserException, UserPayload> =
         input.toDomain().flatMap { user ->
             val userDocument = UserDocument.fromDomain(user)
-            userRepository.create(userDocument).flatMap { userDocument ->
-                userDocument.toDomain().map { user ->
-                    UserPayload.fromDomain(user)
+            userRepository.create(userDocument).flatMap { createdUserDocument ->
+                createdUserDocument.toDomain().map { createdUser ->
+                    UserPayload.fromDomain(createdUser)
                 }
             }
         }
