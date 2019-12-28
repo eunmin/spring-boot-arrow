@@ -36,8 +36,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("io.springfox:springfox-swagger2:2.9.2")
 	implementation("io.springfox:springfox-swagger-ui:2.9.2")
-	implementation("io.arrow-kt:arrow-core:$arrow_version")
+	implementation("io.arrow-kt:arrow-fx:$arrow_version")
 	implementation("io.arrow-kt:arrow-syntax:$arrow_version")
+	implementation("io.arrow-kt:arrow-mtl:$arrow_version")
 	kapt("io.arrow-kt:arrow-meta:$arrow_version")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
