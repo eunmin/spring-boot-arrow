@@ -138,7 +138,31 @@ class UserService(
 
 ### Effect는 Controller에서
 
+```kotlin
+@RestController
+@RequestMapping("/v1/users")
+class UserController(
+        private val userService: UserService
+) {
+    @GetMapping("/{id}")
+    fun get(@PathVariable("id") id: String): UserPayload {
+        val userPayload = userService.get(id)
+        return when(userPayload) {
+            is Either.Right -> userPayload.b
+            is Either.Left -> throw userPayload.a
+        }
+    }
 
+    @PostMapping("/")
+    fun create(@RequestBody input: CreateUserInput): UserPayload {
+        val userPayload = userService.create(input)
+        return when(userPayload) {
+            is Either.Right -> userPayload.b
+            is Either.Left -> throw userPayload.a
+        }
+    }
+}
+```
 
 ### Arrow Monad Comprehension
 
@@ -174,4 +198,65 @@ class UserService(
 
 ## Effect를 IO로 순수하게 만들기
 
+### Arrow Fx 
+
+https://arrow-kt.io/docs/fx/
+
+```kotlin
+@Repository
+class UserRepositoryImpl(
+        private val mongoTemplate: MongoTemplate
+): UserRepository {
+    override fun create(userDocument: UserDocument): IO<Either<UserException, UserDocument>> = IO {
+        try {
+            Right(mongoTemplate.insert(userDocument))
+        } catch (e: DuplicateKeyException) {
+            Left(DuplicateUser(userDocument.id))
+        }
+    }
+
+    override fun get(id: String): IO<Either<UserException, UserDocument>> = IO {
+        mongoTemplate.findById(id, UserDocument::class.java)?.let { Right(it) } ?: Left(UserNotFound(id))
+    }
+}
+```
+
+### Effect는 Controller에서
+
+```kotlin
+val userPayload = userService.get(id).unsafeRunSync()
+```
+
 ### EitherT
+
+모나드는 합성이 어렵다. 특정 모나드에 적용할 수 있는 모나드 트랜스포머(OptionT, StateT, EitherT ...)
+
+https://arrow-kt.io/docs/arrow/mtl/eithert/
+
+```kotlin
+@Service
+class UserService(
+        private val userRepository: UserRepository
+) {
+    fun get(id: String): IO<Either<UserException, UserPayload>> =
+            EitherT.monad<ForIO, UserException>(IO.monad()).fx.monad {
+                val userDocument = EitherT(userRepository.get(id)).bind()
+                val user = EitherT(IO.just(userDocument.toDomain())).bind()
+                UserPayload.fromDomain(user)
+            }.value().fix()
+
+
+    fun create(input: CreateUserInput): IO<Either<UserException, UserPayload>> =
+            EitherT.monad<ForIO, UserException>(IO.monad()).fx.monad {
+                val user = EitherT(IO.just(input.toDomain())).bind()
+                val userDocument = UserDocument.fromDomain(user)
+                val createdUserDocument = EitherT(userRepository.create(userDocument)).bind()
+                val createdUser = EitherT(IO.just(createdUserDocument.toDomain())).bind()
+                UserPayload.fromDomain(createdUser)
+            }.value().fix()
+}
+```
+
+## 생각해볼 내용
+
+- IO 컨텍스트를 Tagless Final로 유연하게 만들기
