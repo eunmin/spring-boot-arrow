@@ -10,7 +10,7 @@
 
 - [Clean 아키텍처](http://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Onion 아키텍처](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)
-- [Hexagonal 아키텍처)(http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html)
+- [Hexagonal 아키텍처](http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html)
 
 ## 예제에서 어느 부분?
 
@@ -81,6 +81,34 @@ class UserRepositoryImpl(
 ```
 
 ## 예외 대신 Either로 순수하게 만들기
+
+### Arrow Functor
+
+https://arrow-kt.io/docs/arrow/typeclasses/functor/
+
+```kotlin
+import arrow.*
+import arrow.core.*
+
+Try { "1".toInt() }.map { it * 2 }
+Option(1).map { it * 2 }
+// Some(2)
+```
+
+### Arrow Monad
+
+https://arrow-kt.io/docs/arrow/typeclasses/monad/
+
+```kotlin
+import arrow.core.*
+import arrow.core.extensions.*
+import arrow.fx.*
+
+Some(1).flatMap { a ->
+  Some(a + 1)
+}
+// Some(2)
+```
 
 ### Arrow Either
 
