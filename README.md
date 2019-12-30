@@ -4,6 +4,21 @@
 
 ## 예제 살펴보기
 
+- 아래 데이터를 저장하고 가져오는 단순한 Rest API 
+
+```kotlin
+data class User(
+        val id: Userid,
+        val name: Username
+)
+```
+
+- `POST /v1/users/`로 만들기
+- `GET /v1/users/{id}`로 가져오기
+- `Userid`는 16자 이하, `Username`은 80자 이하, 만약 넘으면 401 Response
+- 중복된 사용자는 409 Response
+- 없는 사용자는 404 Response
+
 ## 순수한 영역과 비순수한 영역을 구분하기
 
 비즈니스 영역(Domain, Use Case)과 나머지 Framework, Infra, .. 등을 분리하고 비즈니스 영역을 순수하게 유지한다.
