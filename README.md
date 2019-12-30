@@ -8,9 +8,9 @@
 
 비즈니스 영역(Domain, Use Case)과 나머지 Framework, Infra, .. 등을 분리하고 비즈니스 영역을 순수하게 유지한다.
 
-[Clean 아키텍처](http://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-[Onion 아키텍처](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)
-[Hexagonal 아키텍처)(http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html)
+- [Clean 아키텍처](http://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Onion 아키텍처](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)
+- [Hexagonal 아키텍처)(http://www.dossier-andreas.net/software_architecture/ports_and_adapters.html)
 
 ## 예제에서 어느 부분?
 
